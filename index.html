@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dev Detective</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="dev.css">
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <h1>Dev Detective <span class="emoji">🕵️‍♂️</span></h1>
+      <p class="tag">Compare two GitHub developers by stars and followers</p>
+    </header>
+
+    <main>
+      <section class="battle">
+        <div class="battle-box">
+          <div class="inputs">
+            <label class="visually-hidden" for="user1">GitHub Username 1</label>
+            <input type="text" id="user1" placeholder="e.g. gaearon" autocomplete="off">
+
+            <label class="visually-hidden" for="user2">GitHub Username 2</label>
+            <input type="text" id="user2" placeholder="e.g. torvalds" autocomplete="off">
+          </div>
+          <div class="actions">
+            <button id="battleBtn" class="btn-primary">Battle</button>
+            <button id="randomBtn" class="btn-secondary" title="Fill sample users">Random</button>
+            <button id="shareBtn" class="btn-ghost" title="Copy result summary">Share</button>
+          </div>
+        </div>
+        <p class="help">Tip: use exact GitHub usernames. Rate limits may apply.</p>
+      </section>
+
+      <section class="status">
+        <div id="loading" class="loading hidden">
+          <div class="spinner" aria-hidden="true"></div>
+          <span class="loading-text">Searching…</span>
+        </div>
+        <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+      </section>
+
+      <section class="result" aria-live="polite">
+        <div id="card1" class="card"></div>
+        <div id="card2" class="card"></div>
+      </section>
+    </main>
+
+    <footer class="footer">Made with ❤️ — Dev Detective</footer>
+  </div>
+
+  <script src="dev.js"></script>
+</body>
+</html>
