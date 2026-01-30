@@ -56,8 +56,10 @@ async function startBattle(user1, user2) {
     showResult(data1, stars1, data2, stars2);
 
   } catch (error) {
-    alert(error.message);
-  } finally {
+  showToast("❌ User Not Found. Please check the username.");
+}
+
+finally {
     loading.classList.add("hidden");
   }
 }
@@ -91,14 +93,26 @@ function showResult(user1, stars1, user2, stars2) {
 
   card1.innerHTML = `
     <img src="${user1.avatar_url}" width="80">
-    <h3>${user1.login}</h3>
+    <h3>${user1.name || user1.login}</h3>
+    <p class="username">@${user1.login}</p>
+    <p class="bio">${user1.bio || "No bio available"}</p>
+    <p>📅 Joined: ${new Date(user1.created_at).toDateString()}</p>
+    <p>🔗 <a href="${user1.blog || '#'}" target="_blank">
+      ${user1.blog ? "Portfolio" : "Not Available"}
+    </a></p>
     <p>⭐ Stars: ${stars1}</p>
     <p>👥 Followers: ${user1.followers}</p>
   `;
 
   card2.innerHTML = `
     <img src="${user2.avatar_url}" width="80">
-    <h3>${user2.login}</h3>
+    <h3>${user2.name || user2.login}</h3>
+    <p class="username">@${user2.login}</p>
+    <p class="bio">${user2.bio || "No bio available"}</p>
+    <p>📅 Joined: ${new Date(user2.created_at).toDateString()}</p>
+    <p>🔗 <a href="${user2.blog || '#'}" target="_blank">
+      ${user2.blog ? "Portfolio" : "Not Available"}
+    </a></p>
     <p>⭐ Stars: ${stars2}</p>
     <p>👥 Followers: ${user2.followers}</p>
   `;
@@ -117,6 +131,7 @@ function showResult(user1, stars1, user2, stars2) {
     card1.innerHTML += `<p class="quote">"${loserQuote}"</p>`;
   }
 }
+
 
 // ===============================
 // RANDOM SAMPLE USERS
@@ -217,4 +232,12 @@ const loserQuotes = [
 // ===============================
 function getRandomQuote(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
+}
+function formatDate(dateStr) {
+  const date = new Date(dateStr);
+  return date.toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric"
+  });
 }
