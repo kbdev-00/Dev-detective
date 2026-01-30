@@ -56,10 +56,8 @@ async function startBattle(user1, user2) {
     showResult(data1, stars1, data2, stars2);
 
   } catch (error) {
-  showToast("❌ User Not Found. Please check the username.");
-}
-
-finally {
+    showToast("❌ User Not Found. Please check the username.");
+  } finally {
     loading.classList.add("hidden");
   }
 }
@@ -117,6 +115,39 @@ function showResult(user1, stars1, user2, stars2) {
     <p>👥 Followers: ${user2.followers}</p>
   `;
 
+  // ===============================
+  // 👉 ONLY ADDITION: TOP 5 REPOS
+  // ===============================
+
+  getTopRepos(user1.repos_url).then(repos1 => {
+    let list1 = "<h4>Top 5 Latest Repositories</h4><ul>";
+    repos1.forEach(repo => {
+      list1 += `
+        <li>
+          <a href="${repo.html_url}" target="_blank">${repo.name}</a>
+          <span> (${formatDate(repo.created_at)})</span>
+        </li>`;
+    });
+    list1 += "</ul>";
+    card1.innerHTML += list1;
+  });
+
+  getTopRepos(user2.repos_url).then(repos2 => {
+    let list2 = "<h4>Top 5 Latest Repositories</h4><ul>";
+    repos2.forEach(repo => {
+      list2 += `
+        <li>
+          <a href="${repo.html_url}" target="_blank">${repo.name}</a>
+          <span> (${formatDate(repo.created_at)})</span>
+        </li>`;
+    });
+    list2 += "</ul>";
+    card2.innerHTML += list2;
+  });
+
+  // ===============================
+  // WINNER / LOSER
+  // ===============================
   if (stars1 > stars2) {
     card1.classList.add("winner");
     card2.classList.add("loser");
@@ -131,7 +162,6 @@ function showResult(user1, stars1, user2, stars2) {
     card1.innerHTML += `<p class="quote">"${loserQuote}"</p>`;
   }
 }
-
 
 // ===============================
 // RANDOM SAMPLE USERS
@@ -233,11 +263,27 @@ const loserQuotes = [
 function getRandomQuote(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
+
+// ===============================
+// DATE FORMATTER (TERA HI)
+// ===============================
 function formatDate(dateStr) {
-  const date = new Date(dateStr);
-  return date.toLocaleDateString("en-IN", {
+  const d = new Date(dateStr);
+  return d.toLocaleDateString("en-IN", {
     day: "2-digit",
     month: "short",
     year: "numeric"
   });
+}
+
+// ===============================
+// TOP REPOS FETCH (TERA HI)
+// ===============================
+async function getTopRepos(reposUrl) {
+  const res = await fetch(reposUrl);
+  const repos = await res.json();
+
+  return repos
+    .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
+    .slice(0, 5);
 }
